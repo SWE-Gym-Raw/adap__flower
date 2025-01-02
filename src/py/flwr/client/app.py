@@ -55,7 +55,7 @@ from flwr.common.constant import (
 from flwr.common.logger import log, warn_deprecated_feature
 from flwr.common.message import Error
 from flwr.common.retry_invoker import RetryInvoker, RetryState, exponential
-from flwr.common.typing import Fab, Run, RunNotRunningException, UserConfig
+from flwr.common.typing import Run, RunNotRunningException, UserConfig
 from flwr.proto.clientappio_pb2_grpc import add_ClientAppIoServicer_to_server
 from flwr.server.superlink.fleet.grpc_bidi.grpc_server import generic_create_grpc_server
 from flwr.server.superlink.linkstate.utils import generate_rand_int_from_bytes
@@ -411,9 +411,7 @@ def start_client_internal(
                 # Call create_node fn to register node
                 # and store node_id in state
                 if (node_id := conn.create_node()) is None:
-                    raise ValueError(
-                        "Failed to register SuperNode with the SuperLink"
-                    )
+                    raise ValueError("Failed to register SuperNode with the SuperLink")
                 state.set_node_id(node_id)
                 run_info_store = DeprecatedRunInfoStore(
                     node_id=state.get_node_id(),
