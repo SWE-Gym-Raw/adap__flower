@@ -66,8 +66,10 @@ NODE_ID = 6
 FAB_HASH = "03840e932bf61247c1231f0aec9e8ec5f041ed5516fb23638f24d25f3a007acd"
 FAB = Fab(FAB_HASH, b"mock fab content")
 RUN_ID = 616
-RUN_STATUS = RunStatus(Status.RUNNING, "", "")
-RUN_INFO = Run(RUN_ID, "dummy/mock", "v0.0", FAB_HASH, {}, "", "", "", "", RUN_STATUS)
+RUN_STATUS = RunStatus(Status.PENDING, "", "")
+RUN_INFO = Run(
+    RUN_ID, "dummy/mock", "v0.0", FAB_HASH, {}, "mock-iso", "", "", "", RUN_STATUS
+)
 MESSAGE = Message(
     metadata=Metadata(
         run_id=RUN_ID,
