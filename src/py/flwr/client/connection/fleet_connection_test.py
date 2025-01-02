@@ -1,4 +1,4 @@
-# Copyright 2024 Flower Labs GmbH. All Rights Reserved.
+# Copyright 2025 Flower Labs GmbH. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +26,11 @@ from unittest.mock import Mock, patch
 from google.protobuf.message import Message as GrpcMessage
 
 from flwr.common import Message, serde
+from flwr.common.constant import Status
 from flwr.common.message import Metadata
 from flwr.common.retry_invoker import RetryInvoker, exponential
 from flwr.common.serde_test import RecordMaker
-from flwr.common.typing import Fab, Run
+from flwr.common.typing import Fab, Run, RunStatus
 from flwr.proto.fab_pb2 import GetFabRequest, GetFabResponse  # pylint: disable=E0611
 from flwr.proto.fleet_pb2 import (  # pylint: disable=E0611
     CreateNodeRequest,
@@ -65,7 +66,8 @@ NODE_ID = 6
 FAB_HASH = "03840e932bf61247c1231f0aec9e8ec5f041ed5516fb23638f24d25f3a007acd"
 FAB = Fab(FAB_HASH, b"mock fab content")
 RUN_ID = 616
-RUN_INFO = Run(RUN_ID, "dummy/mock", "v0.0", FAB_HASH, {})
+RUN_STATUS = RunStatus(Status.RUNNING, "", "")
+RUN_INFO = Run(RUN_ID, "dummy/mock", "v0.0", FAB_HASH, {}, "", "", "", "", RUN_STATUS)
 MESSAGE = Message(
     metadata=Metadata(
         run_id=RUN_ID,
@@ -193,7 +195,7 @@ class FleetConnectionTest(unittest.TestCase):
         """Test get_fab method."""
         # Execute
         self.conn.create_node()
-        actual_fab = self.conn.get_fab(FAB_HASH)
+        actual_fab = self.conn.get_fab(FAB_HASH, RUN_ID)
 
         # Assert
         self.assertEqual(self.get_fab_received, FAB_HASH)
